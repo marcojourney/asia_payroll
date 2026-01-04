@@ -1,91 +1,177 @@
-# cb_pr_calculation
+# **@asia-payroll/cambodia**
 
-A reusable npm package to calculate salary for companies in Cambodia.
+A reusable **TypeScript/JavaScript payroll calculation library** for companies operating in Cambodia.
+Designed with a **modular architecture** to support future Asian countries (Vietnam, Thailand, Laos, etc.) through a plugin-style system.
 
-[![NPM Version](https://img.shields.io/npm/v/cb_pr_calculation.svg)](https://www.npmjs.com/package/cb_pr_calculation)
-[![License](https://img.shields.io/npm/l/cb_pr_calculation.svg)](https://github.com/your-username/cb_pr_calculation/blob/main/LICENSE)
+---
 
-## Installation
+## 🚀 **Overview**
+
+`@asia-payroll/cambodia` provides accurate and up-to-date salary calculations based on Cambodian labor regulations, including:
+
+* Tax on Salary (ToS)
+* NSSF (Employee & Employer)
+* Dependent deduction
+* Overtime rules
+* Seniority (Backpay & ongoing 2.5%)
+* Probation salary logic
+* Public holiday & weekend compensation
+* Common allowances and deductions
+
+This package is part of the future **Asia Payroll Suite**, starting first with Cambodia.
+
+---
+
+## 📦 **Install**
 
 ```bash
-npm install cb_pr_calculation
-```
-<h2>Usage</h2>
-
-```javascript
-const { calculateSalary, calculateBonus } = require('your-package-name');
-
-// Calculate salary
-const salaryResult = calculateSalary(50000, 10, 20);
-console.log(salaryResult.netSalary);
-
-// Calculate bonus
-const bonusAmount = calculateBonus(50000, 10);
-console.log(bonusAmount);
-
+npm install @asia-payroll/cambodia
+# or
+yarn add @asia-payroll/cambodia
 ```
 
-<h2>API Reference</h2>
+---
 
-<h3><code>calculateSalary(basicSalary, bonusPercentage, taxPercentage)</code></h3>
+## 🧩 **Architecture (Expandable Design)**
 
-<p>
-  Calculate salary based on the provided <code>basicSalary</code>, <code>bonusPercentage</code>, and <code>taxPercentage</code>.
-</p>
+This library is designed to scale into a full regional solution:
 
-<h4>Parameters:</h4>
+```
+@asia-payroll/core         → Shared interfaces, types, utilities
+@asia-payroll/cambodia     → Cambodia rules
+@asia-payroll/vietnam      → (future)
+@asia-payroll/thailand     → (future)
+```
 
-<ul>
-  <li><code>basicSalary</code> (number): The basic salary amount.</li>
-  <li><code>bonusPercentage</code> (number): The bonus percentage to be applied to the basic salary.</li>
-  <li><code>taxPercentage</code> (number): The tax percentage to be applied to the total taxable amount.</li>
-</ul>
+Country rules are isolated, making maintenance and updates clean and safe.
 
-<h4>Returns:</h4>
+---
 
-<p>
-  <code>SalaryCalculationResult</code> (object): An object containing the calculated salary details:
-</p>
+## 📝 **Features Included**
 
-<ul>
-  <li><code>basicSalary</code> (number): The basic salary amount.</li>
-  <li><code>bonusAmount</code> (number): The calculated bonus amount.</li>
-  <li><code>taxableAmount</code> (number): The total taxable amount after adding the bonus.</li>
-  <li><code>taxAmount</code> (number): The calculated tax amount based on the taxable amount.</li>
-  <li><code>netSalary</code> (number): The final net salary after deducting the tax amount.</li>
-</ul>
+### ✔ Salary Components
 
-<h3><code>calculateBonus(basicSalary, bonusPercentage)</code></h3>
+* Gross → Net
+* Net → Gross (reverse calculation)
+* Bonuses, overtime, and allowances
+* Seniority payment calculation
 
-<p>
-  Calculate bonus amount based on the provided <code>basicSalary</code> and <code>bonusPercentage</code>.
-</p>
+### ✔ Legal Compliance
 
-<h4>Parameters:</h4>
+* Monthly ToS calculation
+* NSSF employee + employer contributions
+* Dependent deduction rules
+* Holiday pay (200–300%)
+* Night shift calculation
 
-<ul>
-  <li><code>basicSalary</code> (number): The basic salary amount.</li>
-  <li><code>bonusPercentage</code> (number): The bonus percentage to be applied to the basic salary.</li>
-</ul>
+### ✔ Utility Functions
 
-<h4>Returns:</h4>
+* Salary breakdown report
+* Payslip-friendly structure
+* Validations & rounding helpers
 
-<p>
-  <code>number</code>: The calculated bonus amount.
-</p>
+---
 
-<h2>License</h2>
+## 🔧 **Usage Example**
 
-<p>cb_pr_calculation is open-source software licensed under the <a href="https://github.com/your-username/your-package-name/blob/main/LICENSE">MIT license</a</p>
+### **Basic Salary Calculation**
 
-<h2>Contribution</h2>
+```ts
+import { calculatePayroll } from "@asia-payroll/cambodia";
 
-<p>Contributions are welcome! If you find any issues or want to add new features, feel free to submit a pull request.</p>
+const result = calculatePayroll({
+  grossSalary: 1200000,
+  dependents: 1,
+  includeNSSF: true,
+  seniorityEnabled: true,
+});
 
-<h2>Support</h2>
+console.log(result);
+```
 
-<p>If you encounter any problems or have questions, please <a href="https://github.com/your-username/your-package-name/issues">open an issue</a> on GitHub.</p>
+### **Output Example**
 
-<h2>Acknowledgments</h2>
+```json
+{
+  "grossSalary": 1200000,
+  "taxOnSalary": 20000,
+  "nssfEmployee": 12000,
+  "nssfEmployer": 24000,
+  "seniority": 30000,
+  "netSalary": 1158000
+}
+```
 
-<p>Special thanks to Sophanna M. for creating this amazing npm package.</p>
+---
+
+## 📘 **API Reference**
+
+### `calculatePayroll(options)`
+
+| Field            | Type    | Required | Description            |
+| ---------------- | ------- | -------- | ---------------------- |
+| grossSalary      | number  | ✓        | Monthly gross salary   |
+| dependents       | number  | ✗        | Number of dependents   |
+| includeNSSF      | boolean | ✗        | Default = true         |
+| seniorityEnabled | boolean | ✗        | Include seniority 2.5% |
+
+More APIs like `calculateToS`, `calculateNSSF`, and `reversePayroll` are documented in `/docs`.
+
+---
+
+## 🌏 **Why Cambodia First?**
+
+Although the long-term vision is **Asia-wide payroll**, each country has unique regulations:
+
+* Tax brackets
+* Social security rules
+* Employer/employee contributions
+* Termination & severance laws
+* Public holidays
+
+Starting with Cambodia ensures:
+
+1. **High accuracy**
+2. **Deep reliability**
+3. **A clean, modular structure**
+4. **A stable foundation for future countries**
+
+---
+
+## 🛣️ **Roadmap**
+
+### **Phase 1 — Cambodia (current)**
+
+* ✔ Tax on Salary
+* ✔ NSSF
+* ✔ Seniority
+* ✔ Public holidays
+* ☐ Complete payslip generator
+* ☐ Historical law versions
+
+### **Phase 2 — Core Engine**
+
+* ☐ Publish `@asia-payroll/core`
+* ☐ Shared country-agnostic interfaces
+
+### **Phase 3 — Asia Expansion**
+
+* ☐ Vietnam package
+* ☐ Thailand package
+* ☐ Laos package
+* ☐ Malaysia package
+
+---
+
+## 🤝 **Contributing**
+
+PRs and issues are welcome!
+We want to make this the most reliable payroll calculation suite for Asian SMEs.
+
+---
+
+## 📄 **License**
+
+MIT License — free for commercial and personal use.
+
+---
